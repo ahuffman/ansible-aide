@@ -12,9 +12,7 @@ The default settings will deploy all the same configuration options that come wi
 `aide_database_out_filename`: 'aide.db.new.gz'            #only the filename, no path   
 `aide_gzip_dbout`: 'yes'                                  #yes|no   
 `aide_verbose`: 5                                         #level of verbosity 0-255   
-`aide_report_url`:   
-  - 'file:@@{LOGDIR}/aide.log'   
-  - stdout   
+`aide_report_url`: []  
 `aide_acl_no_symlink_follow`: 'yes'                       #yes|true|no|false   
 `aide_warn_dead_symlinks`: 'no'                           #yes|true|no|false   
 `aide_grouped`: 'yes'                                     #yes|true|no|false   
