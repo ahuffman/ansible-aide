@@ -1,0 +1,163 @@
+---
+aide_pkg: aide                                         #override with a specific version if required
+aide_dbdir: /var/lib/aide
+aide_macros:
+# Define a variable example
+  define:
+#    - name: DBDIR variable
+#      variable: DBDIR
+#      value: /var/lib/aide
+    - name: LOGDIR variable
+      variable: LOGDIR
+      value: /var/log/aide
+# Undefine a variable example
+#  undefine:
+#    - name: Undefine DBDIR
+#      variable: 'DBDIR'
+aide_database_filename: 'aide.db.gz'                    #only the filename, no path
+aide_database_out_filename: 'aide.db.new.gz'            #only the filename, no path
+aide_gzip_dbout: 'yes'                                  #yes|no
+aide_verbose: 5                                         #level of verbosity 0-255
+aide_report_url:
+  - 'file:@@{LOGDIR}/aide.log'
+  - stdout
+aide_acl_no_symlink_follow: 'yes'                       #yes|true|no|false
+aide_warn_dead_symlinks: 'no'                           #yes|true|no|false
+aide_grouped: 'yes'                                     #yes|true|no|false
+aide_summarize_changes: 'no'                            #yes|true|no|false
+#aide_report_attributes: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool
+#aide_ignore_list: []                                   #list of default rules to ignore in reports ^
+aide_config_version: 1                                  #optional for information only
+aide_cron_email_notify: ''                                                     #Who to email aide report to after aide --check. Can be comma-separated list
+aide_cronjob_name: 'aide scheduled database checkup'                           #will put a comment in crontab for this scheduled job
+aide_cron_sched_min: '0'                                                       #minute
+aide_cron_sched_hr: '1'                                                        #hour
+aide_cron_sched_day: '*'                                                       #day
+aide_cron_sched_mon: '*'                                                       #month
+aide_cron_sched_wkd: '*'                                                       #weekday
+aide_rules:
+  - name: FIPSR Rule
+    rule: FIPSR
+#    comment: Example Rule Comment
+    attributes: ['p', 'i', 'n', 'u', 'g', 's', 'm', 'c', 'acl', 'selinux', 'xattrs', 'sha256']
+  - name: ALLXTRAHASHES Rule
+    rule: ALLXTRAHASHES
+    attributes: ['sha1', 'rmd160', 'sha256', 'sha512', 'tiger']
+  - name: EVERYTHING Rule
+    rule: EVERYTHING
+    attributes: ['R', 'ALLXTRAHASHES']
+  - name: NORMAL Rule
+    rule: NORMAL
+    attributes: ['FIPSR', 'sha512']
+    paths:
+      - /boot
+      - /bin
+      - /sbin
+      - /lib
+      - /lib64
+      - /opt
+      - /usr
+      - /root
+      - /etc/exports
+      - /etc/fstab
+      - /etc/passwd
+      - /etc/group
+      - /etc/gshadow
+      - /etc/shadow
+      - /etc/security/opasswd
+      - /etc/hosts.allow
+      - /etc/hosts.deny
+      - /etc/sudoers
+      - /etc/skel
+      - /etc/logrotate.d
+      - /etc/nscd.conf
+      - /etc/securetty
+      - /etc/profile
+      - /etc/bashrc
+      - /etc/bash_completion.d/
+      - /etc/login.defs
+      - /etc/zprofile
+      - /etc/zshrc
+      - /etc/zlogin
+      - /etc/zlogout
+      - /etc/profile.d/
+      - /etc/X11/
+      - /etc/yum.conf
+      - /etc/yumex.conf
+      - /etc/yumex.profiles.conf
+      - /etc/yum
+      - /etc/yum.repos.d/
+  - name: DIR Rule
+    rule: DIR
+    attributes: ['p', 'i', 'n', 'u', 'g', 'acl', 'selinux', 'xattrs']
+  - rule: PERMS
+    attributes: ['p', 'i', 'u', 'g', 'acl', 'selinux']
+    paths:
+      - /etc
+      - /root/\..*
+  - name: LOG Rule
+    rule: LOG
+    attributes: '>'
+    paths:
+      - /var/log
+      - /var/run/utmp
+  - name: LSPP Rule
+    rule: LSPP
+    attributes: ['FIPSR', 'sha512']
+    paths:
+      - /etc/audit/
+      - /etc/libaudit.conf
+      - /usr/sbin/stunnel
+      - /var/spool/at
+      - /etc/at.allow
+      - /etc/at.deny
+      - /etc/cron.allow
+      - /etc/cron.deny
+      - /etc/cron.d/
+      - /etc/cron.daily/
+      - /etc/cron.hourly/
+      - /etc/cron.monthly/
+      - /etc/cron.weekly/
+      - /etc/crontab
+      - /var/spool/cron/root
+      - /etc/login.defs
+      - /etc/securetty
+      - /var/log/faillog
+      - /var/log/lastlog
+      - /etc/hosts
+      - /etc/sysconfig
+      - /etc/inittab
+      - /etc/grub
+      - /etc/rc.d
+      - /etc/ld.so.conf
+      - /etc/localtime
+      - /etc/sysctl.conf
+      - /etc/modprobe.conf
+      - /etc/pam.d
+      - /etc/security
+      - /etc/aliases
+      - /etc/postfix
+      - /etc/ssh/sshd_config
+      - /etc/ssh/ssh_config
+      - /etc/stunnel
+      - /etc/vsftpd.ftpusers
+      - /etc/vsftpd
+      - /etc/issue
+      - /etc/issue.net
+      - /etc/cups
+  - name: DATAONLY Rule
+    rule: DATAONLY
+    attributes: ['p', 'n', 'u', 'g', 's', 'acl', 'selinux', 'xattrs', 'sha256']
+    paths:
+      - /etc/resolv.conf
+#Special rule for ignoring paths. This will add '!' to the beginning of the path for you in the config.
+  - name: Special Negative/Ignore Path rule
+    rule: negative
+    paths:
+      - /usr/src
+      - /usr/tmp
+      - /etc/mtab
+      - /etc/.*~
+      - /var/log/sa
+      - /var/log/aide.log
+      - /var/log/and-httpd
