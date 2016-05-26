@@ -31,19 +31,19 @@ The default settings will deploy all the same configuration options that come wi
 `aide_cron_sched_wkd`: '*'                                #weekday   
 
 ## Defining and Undefining aide.conf Variables
-`aide_macros`:   
-  `define`:   
-     - `name`: Give it a name   
-       `variable`: Name_of_Variable   
-       `value`: Value of the variable   
-     - `name`: DBDIR var   
-       `variable`: DBDIR   
-       `value`: /var/lib/aide   
-  `undefine`:   
-     - `name`: Some var to undefine   
-       `variable`: Name_of_Variable  #This would effectively undefine the variable we defined above   
-     - `name`: Undefining DBDIR var   
-       `variable`: DBDIR   
+    `aide_macros`:   
+      `define`:   
+         - `name`: Give it a name   
+           `variable`: Name_of_Variable   
+           `value`: Value of the variable   
+         - `name`: DBDIR var   
+           `variable`: DBDIR   
+           `value`: /var/lib/aide   
+      `undefine`:   
+         - `name`: Some var to undefine   
+           `variable`: Name_of_Variable  #This would effectively undefine the variable we defined above   
+         - `name`: Undefining DBDIR var   
+           `variable`: DBDIR   
 
 
 ## Defining Rules/Groups, Selection paths, and Ignore/Negative Selection Paths
@@ -52,13 +52,14 @@ A YAML spec was built to handle all of these items in a relatively organized way
 
 ### Attributes available to a rule:
 
-`aide_rules`:   
-  - `name`: My first rule                                                #Required   
-    `rule`: FIPSR                                                        #Required   
-    `comment`: Comment to put above this rule declaration                #Optional   
-    `attributes`: []  #List made up of default rules or defined rules    #Required except on special negative rule   
-    `paths`:                                                             #Optional   
-       - /my/include/path/1  #Cannot start with '!' see Ignore/Negative Selection Paths   
+    `aide_rules`:   
+      - `name`: My first rule                                                #Required   
+        `rule`: FIPSR                                                        #Required   
+        `comment`: Comment to put above this rule declaration                #Optional   
+        `attributes`: []  #List made up of default rules or defined rules    #Required except on special negative rule   
+        `paths`:                                                             #Optional   
+           - /my/include/path/1  #Cannot start with '!' see Ignore/Negative Selection Paths   
+           - /my/include/path/2
 
 
 ### A Special Rule to handle Ignore/Negative Selection Paths is available
@@ -66,11 +67,12 @@ A YAML spec was built to handle all of these items in a relatively organized way
 Add a rule to your `aide_rules`: definition with `rule`: negative   
 Here's an example, and you can also find an example in this Role's defaults/main.yml:   
 
-`aide_rules`:   
-  - `name`: My negative/ignore selections                                #Required   
-    `rule`: negative                                                     #Required   
-    `paths`:                                                             #Required   
-       - /my/ignore/path/1    
+    `aide_rules`:   
+      - `name`: My negative/ignore selections                                #Required   
+        `rule`: negative                                                     #Required   
+        `paths`:                                                             #Required   
+           - /my/ignore/path/1    
+           - /my/ignore/path/2
 
 Do not include an '!' in front of the paths, the template logic will automatically do this for you.   
 
