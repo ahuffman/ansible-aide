@@ -7,9 +7,4 @@
   shell: mv "{{ aide_database_out_filename }}" "{{ aide_database_filename }}"
   args:
     chdir: "{{ aide_dbdir }}"
-  when: "aide_db_check.stat.exists != True"
-
-#Only update db when it actually exists first and the config has changed
-- name: Update aide database
-  shell: /sbin/aide -u
-  when: "aide_db_check.stat.exists == True"
+  when: ("aide_db_check.stat.exists != True") or ("aide_update.changed == True")
