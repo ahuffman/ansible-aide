@@ -42,8 +42,6 @@
     job: /usr/sbin/aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
   when: aide_cron_email_notify != ''
 
-- debug: msg="db_exists {{ aide_db_check.stat.exists }}"
-
 - name: Update aide database
   shell: /sbin/aide -u
   register: aide_update
