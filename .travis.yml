@@ -3,23 +3,27 @@ language: python
 python: "2.7"
 
 # Use the new container infrastructure
-sudo: required
+sudo: false
 
-services:
-  - docker
+# Install ansible
+addons:
+  apt:
+    packages:
+    - python-pip
 
-before_install:
-#Pull down ansible docker image for EL testing
-  - sudo docker pull ansible/centos7-ansible:1.8
+install:
+  # Install ansible
+  - pip install ansible
+
+  # Check ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../' >ansible.cfg
 
 script:
-#Fire up ansible container
-  - sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/ansible-aide:ro centos7-ansible:1.8
-# Basic role syntax check
-  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/roles/ansible-aide/test.yml -i /etc/ansible/ansible-aide/inventory --syntax-check
-#Role run on localhost
-  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/roles/ansible-aide/test.yml -i /etc/ansible/roles/ansible-aide/inventory --connection=local
-  - sudo docker stop "$(cat /tmp/container_id)"
+  # Basic role syntax check
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
