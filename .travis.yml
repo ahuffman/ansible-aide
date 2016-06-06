@@ -5,15 +5,14 @@ python: "2.7"
 # Use the new container infrastructure
 sudo: required
 
-install:
-addons:
-  apt:
-    packages:
-    - docker
+services:
+  - docker
 
-script:
+before_install:
 #Pull down ansible docker image for EL testing
   - sudo docker pull ansible/centos7-ansible:1.8
+
+script:
 #Fire up ansible container
   - sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/ansible-aide:ro centos7-ansible:1.8
 # Basic role syntax check
