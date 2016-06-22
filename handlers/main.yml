@@ -1,6 +1,6 @@
 ---
 - name: Initialize aide database
-  shell: /sbin/aide -i
+  shell: aide -i
   when: "aide_db_check.stat.exists != True"
 
 - name: Move new aide database into place

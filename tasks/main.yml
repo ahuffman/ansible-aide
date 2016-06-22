@@ -11,7 +11,12 @@
     - Move new aide database into place
 
 - name: Configure /etc/aide.conf
-  template: src=aide.conf.j2 dest=/etc/aide.conf validate='/sbin/aide -D --config=%s'
+  template: src=aide.conf.j2 dest=/etc/aide.conf
+  register: config 
+
+- name: Validate Aide Configuration
+  shell: aide -D -c /etc/aide.conf
+  when: config.changed
 
 #Setup crontab
 - name: Setup aide in cron - No Email Report
@@ -25,7 +30,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: /usr/sbin/aide --check
+    job: aide --check
   when: aide_cron_email_notify == ''
 
 - name: Setup aide in cron - With Email Report
@@ -39,11 +44,11 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: /usr/sbin/aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
+    job: aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
   when: aide_cron_email_notify != ''
 
 - name: Update aide database
-  shell: /sbin/aide -u
+  shell: aide -u
   register: aide_update
   failed_when: "aide_update.rc > 7"
   when: "aide_db_check.stat.exists == True"

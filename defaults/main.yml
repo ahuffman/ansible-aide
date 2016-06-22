@@ -23,18 +23,17 @@ aide_report_url:
   - stdout
 aide_acl_no_symlink_follow: 'yes'                       #yes|true|no|false
 aide_warn_dead_symlinks: 'no'                           #yes|true|no|false
-aide_grouped: 'yes'                                     #yes|true|no|false
 aide_summarize_changes: 'no'                            #yes|true|no|false
 #aide_report_attributes: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool
 #aide_ignore_list: []                                   #list of default rules to ignore in reports ^
 aide_config_version: 1                                  #optional for information only
-aide_cron_email_notify: ''           #Who to email aide report to after aide --check. Can be comma-separated list
-aide_cronjob_name: 'aide scheduled database checkup'    #will put a comment in crontab for this scheduled job
-aide_cron_sched_min: '0'                                #minute
-aide_cron_sched_hr: '1'                                 #hour
-aide_cron_sched_day: '*'                                #day
-aide_cron_sched_mon: '*'                                #month
-aide_cron_sched_wkd: '*'                                #weekday
+aide_cron_email_notify: ''                                                     #Who to email aide report to after aide --check. Can be comma-separated list
+aide_cronjob_name: 'aide scheduled database checkup'                           #will put a comment in crontab for this scheduled job
+aide_cron_sched_min: '0'                                                       #minute
+aide_cron_sched_hr: '1'                                                        #hour
+aide_cron_sched_day: '*'                                                       #day
+aide_cron_sched_mon: '*'                                                       #month
+aide_cron_sched_wkd: '*'                                                       #weekday
 aide_rules:
   - name: FIPSR Rule
     rule: FIPSR
