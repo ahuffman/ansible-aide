@@ -15,7 +15,6 @@ The default settings will deploy all the same configuration options that come wi
 `aide_report_url`: []  
 `aide_acl_no_symlink_follow`: 'yes'                       #yes|true|no|false   
 `aide_warn_dead_symlinks`: 'no'                           #yes|true|no|false   
-`aide_grouped`: 'yes'                                     #yes|true|no|false   
 `aide_summarize_changes`: 'no'                            #yes|true|no|false   
 `aide_report_attributes`: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool   
 `aide_ignore_list`: []                                   #list of default rules to ignore in reports ^   
