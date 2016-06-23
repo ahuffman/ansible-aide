@@ -16,9 +16,10 @@ The default settings will deploy all the same configuration options that come wi
 `aide_acl_no_symlink_follow`: 'yes'                       #yes|true|no|false   
 `aide_warn_dead_symlinks`: 'no'                           #yes|true|no|false   
 `aide_summarize_changes`: 'no'                            #yes|true|no|false   
-`aide_report_attributes`: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool   
-`aide_ignore_list`: []                                   #list of default rules to ignore in reports ^   
+`aide_report_attributes`: []                              #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool   
+`aide_ignore_list`: []                                    #list of default rules to ignore in reports ^   
 `aide_config_version`: 1                                  #optional for information only   
+`aide_cron_schedule_check`: True                          #Whether or not to add a scheduled aide --check to cron you'd have to manually run your checks if preferred 
 `aide_cron_email_notify`: ''           #Who to email aide report to after aide --check. Can be comma-separated list   
 `aide_cronjob_name`: 'aide scheduled database checkup'    #will put a comment in crontab for this scheduled job   
 `aide_cron_sched_min`: '0'                                #minute   
@@ -71,8 +72,12 @@ Here's an example, and you can also find an example in this Role's defaults/main
            - /my/ignore/path/1    
            - /my/ignore/path/2
 
-Do not include an '!' in front of the paths, the template logic will automatically do this for you.   
+Do not include an '!' in front of the paths, the template logic will automatically do this for you.  
 
+
+### Scheduled Cron Aide Checks 
+
+The default is to setup an 'aide --check' in crontab.  Should you wish to change this after already allowing this role to create the cron job, simply switch the variable `aide_cron_schedule_check` to False.  This will remove the cron job from your system's crontab on the next playbook run.  One caveat to be aware of is that the `aide_cronjob_name` variable must match what's currently in the crontab to be removed properly.
 
 
 Example Playbook

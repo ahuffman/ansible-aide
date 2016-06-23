@@ -19,7 +19,7 @@
   when: config.changed
 
 #Setup crontab
-- name: Setup aide in cron - No Email Report
+- name: Ensure aide check is setup in crontab - No Email Report
   cron: 
     name: "{{ aide_cronjob_name }}"
     backup: yes 
@@ -31,9 +31,9 @@
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
     job: aide --check
-  when: aide_cron_email_notify == ''
+  when: (aide_cron_email_notify == '' and aide_cron_schedule_check == True)
 
-- name: Setup aide in cron - With Email Report
+- name: Ensure aide check is setup in crontab - With Email Report
   cron:
     name: "{{ aide_cronjob_name }}"
     backup: yes
@@ -45,7 +45,16 @@
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
     job: aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
-  when: aide_cron_email_notify != ''
+  when: (aide_cron_email_notify != '' and aide_cron_schedule_check == True)
+
+#Remove old cron jobs when aide_cron_schedule_check has been changed to False
+- name: Ensure aide check is removed in crontab - No Email Report
+  cron: name="{{ aide_cronjob_name }}" state=absent
+  when: (aide_cron_email_notify == '' and aide_cron_schedule_check == False)
+
+- name: Ensure aide check is removed in crontab - With Email Report
+  cron: name="{{ aide_cronjob_name }}" state=absent
+  when: (aide_cron_email_notify != '' and aide_cron_schedule_check == False)
 
 - name: Update aide database
   shell: aide -u
