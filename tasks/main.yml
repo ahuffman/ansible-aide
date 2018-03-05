@@ -21,11 +21,11 @@
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
-  cron: 
+  cron:
     name: "{{ aide_cronjob_name }}"
-    backup: yes 
-    user: root 
-    state: present 
+    backup: yes
+    user: root
+    state: present
     minute: "{{ aide_cron_sched_min }}"
     hour: "{{ aide_cron_sched_hr }}"
     day: "{{ aide_cron_sched_day }}"
@@ -74,5 +74,5 @@
   register: aide_update
   failed_when: "aide_update.rc > 7"
   when: "aide_db_check.stat.exists == True"
-  notify: 
+  notify:
     - Move new aide database into place
