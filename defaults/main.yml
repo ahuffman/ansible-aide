@@ -1,5 +1,4 @@
 ---
-aide_pkg: aide                                         #override with a specific version if required
 aide_dbdir: /var/lib/aide
 aide_macros:
 # Define a variable example

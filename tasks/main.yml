@@ -1,4 +1,13 @@
 ---
+- name: Set OS dependent variables
+  include_vars: "{{ item }}"
+  with_first_found:
+   - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+   - "{{ ansible_distribution }}.yml"
+   - "{{ ansible_os_family }}_{{ ansible_distribution_major_version }}.yml"
+   - "{{ ansible_os_family }}.yml"
+   - default.yml
+
 - name: Ensure aide is installed
   yum:
     name: "{{ aide_pkg }}"
@@ -31,7 +40,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: aide --check
+    job: "{{ aide_path }} --check"
   when:
     - aide_cron_email_notify == ''
     - aide_cron_schedule_check == True
@@ -47,7 +56,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
+    job: "{{ aide_path }} --check | /usr/bin/mail -s \"AIDE Report - $HOSTNAME\" {{ aide_cron_email_notify }}"
   when:
     - aide_cron_email_notify != ''
     - aide_cron_schedule_check == True
