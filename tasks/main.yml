@@ -1,9 +1,12 @@
 ---
 - name: Ensure aide is installed
-  yum: name="{{ aide_pkg }}" state=latest
+  yum:
+    name: "{{ aide_pkg }}"
+    state: latest
 
 - name: Check for existing aide database
-  stat: path="{{ aide_dbdir }}/{{ aide_database_filename }}"
+  stat:
+    path: "{{ aide_dbdir }}/{{ aide_database_filename }}"
   register: aide_db_check
   changed_when: "aide_db_check.stat.exists != True"
   notify:
@@ -11,27 +14,27 @@
     - Move new aide database into place
 
 - name: Configure /etc/aide.conf
-  template: src=aide.conf.j2 dest=/etc/aide.conf
-  register: config 
-
-- name: Validate Aide Configuration
-  shell: aide -D -c /etc/aide.conf
-  when: config.changed
+  template:
+    src: aide.conf.j2
+    dest: /etc/aide.conf
+    validate: aide -D -c /etc/aide.conf
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
-  cron: 
+  cron:
     name: "{{ aide_cronjob_name }}"
-    backup: yes 
-    user: root 
-    state: present 
+    backup: yes
+    user: root
+    state: present
     minute: "{{ aide_cron_sched_min }}"
     hour: "{{ aide_cron_sched_hr }}"
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
     job: aide --check
-  when: (aide_cron_email_notify == '' and aide_cron_schedule_check == True)
+  when:
+    - aide_cron_email_notify == ''
+    - aide_cron_schedule_check == True
 
 - name: Ensure aide check is setup in crontab - With Email Report
   cron:
@@ -45,21 +48,31 @@
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
     job: aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
-  when: (aide_cron_email_notify != '' and aide_cron_schedule_check == True)
+  when:
+    - aide_cron_email_notify != ''
+    - aide_cron_schedule_check == True
 
 #Remove old cron jobs when aide_cron_schedule_check has been changed to False
 - name: Ensure aide check is removed in crontab - No Email Report
-  cron: name="{{ aide_cronjob_name }}" state=absent
-  when: (aide_cron_email_notify == '' and aide_cron_schedule_check == False)
+  cron:
+    name: "{{ aide_cronjob_name }}"
+    state: absent
+  when:
+    - aide_cron_email_notify == ''
+    - aide_cron_schedule_check == False
 
 - name: Ensure aide check is removed in crontab - With Email Report
-  cron: name="{{ aide_cronjob_name }}" state=absent
-  when: (aide_cron_email_notify != '' and aide_cron_schedule_check == False)
+  cron:
+    name: "{{ aide_cronjob_name }}"
+    state: absent
+  when:
+    - aide_cron_email_notify != ''
+    - aide_cron_schedule_check == False
 
 - name: Update aide database
   shell: aide -u
   register: aide_update
   failed_when: "aide_update.rc > 7"
   when: "aide_db_check.stat.exists == True"
-  notify: 
+  notify:
     - Move new aide database into place
