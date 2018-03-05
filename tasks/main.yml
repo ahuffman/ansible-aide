@@ -11,12 +11,8 @@
     - Move new aide database into place
 
 - name: Configure /etc/aide.conf
-  template: src=aide.conf.j2 dest=/etc/aide.conf
-  register: config 
-
-- name: Validate Aide Configuration
-  shell: aide -D -c /etc/aide.conf
-  when: config.changed
+ template: src=aide.conf.j2 dest=/etc/aide.conf
+  validate: aide -D -c /etc/aide.conf
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
