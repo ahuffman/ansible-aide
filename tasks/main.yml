@@ -1,6 +1,6 @@
 ---
 - name: Ensure aide is installed
-  yum:
+  package:
     name: "{{ aide_pkg }}"
     state: latest
 
