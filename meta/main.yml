@@ -36,8 +36,8 @@ galaxy_info:
     versions:
   #  - all
   #  - 5
-    - 6
-    - 7
+     - 6
+     - 7
   #- name: GenericUNIX
   #  versions:
   #  - all
@@ -57,10 +57,10 @@ galaxy_info:
   #  - 17
   #  - 18
   #  - 19
-    - 20
-    - 21
-    - 22
-    - 23
+     - 20
+     - 21
+     - 22
+     - 23
   #- name: opensuse
   #  versions:
   #  - all
@@ -114,8 +114,8 @@ galaxy_info:
   #  - 9.1
   #  - 9.2
   #  - 9.3
-  #- name: Ubuntu
-  #  versions:
+  - name: Ubuntu
+    versions:
   #  - all
   #  - lucid
   #  - maverick
@@ -128,8 +128,8 @@ galaxy_info:
   #  - trusty
   #  - utopic
   #  - vivid
-  #  - wily
-  #  - xenial
+     - wily
+     - xenial
   #- name: SLES
   #  versions:
   #  - all
@@ -147,16 +147,16 @@ galaxy_info:
   #  versions:
   #  - all
   #  - any
-  #- name: Debian
-  #  versions:
+  - name: Debian
+    versions:
   #  - all
   #  - etch
   #  - jessie
   #  - lenny
   #  - sid
   #  - squeeze
-  #  - stretch
-  #  - wheezy
+     - stretch
+     - wheezy
   
   galaxy_tags:
     - System
