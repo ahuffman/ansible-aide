@@ -4,6 +4,11 @@
     name: "{{ aide_pkg }}"
     state: latest
 
+- name: Capture aide binary path
+  command: "which aide"
+  register: aide_path
+  changed_when: false
+
 - name: Check for existing aide database
   stat:
     path: "{{ aide_dbdir }}/{{ aide_database_filename }}"
@@ -13,11 +18,11 @@
     - Initialize aide database
     - Move new aide database into place
 
-- name: Configure /etc/aide.conf
+- name: Configure aide
   template:
     src: aide.conf.j2
-    dest: /etc/aide.conf
-    validate: aide -D -c /etc/aide.conf
+    dest: "{{ aide_conf_path }}"
+    validate: "{{ aide_path.stdout }} -D -c {{ aide_conf_path }}"
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
@@ -31,7 +36,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: aide --check
+    job: "{{ aide_path.stdout }} --check"
   when:
     - aide_cron_email_notify == ''
     - aide_cron_schedule_check == True
@@ -47,7 +52,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: aide --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}"
+    job: "{{ aide_path.stdout }} --check | /usr/bin/mail -s "AIDE Report - $HOSTNAME" "{{ aide_cron_email_notify }}""
   when:
     - aide_cron_email_notify != ''
     - aide_cron_schedule_check == True
@@ -70,7 +75,7 @@
     - aide_cron_schedule_check == False
 
 - name: Update aide database
-  shell: aide -u
+  command: "{{ aide_path.stdout }} -u"
   register: aide_update
   failed_when: "aide_update.rc > 7"
   when: "aide_db_check.stat.exists == True"
