@@ -22,7 +22,7 @@
   template:
     src: aide.conf.j2
     dest: "{{ aide_conf_path }}"
-    validate: "{{ aide_path.stdout }} -D -c {{ aide_conf_path }}"
+    validate: "{{ aide_path.stdout }} -D -c %s"
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
