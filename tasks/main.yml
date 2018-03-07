@@ -17,7 +17,7 @@
   template:
     src: aide.conf.j2
     dest: /etc/aide.conf
-    validate: aide -D -c /etc/aide.conf
+    validate: aide -D -c %s
 
 #Setup crontab
 - name: Ensure aide check is setup in crontab - No Email Report
