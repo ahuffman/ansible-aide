@@ -1,16 +1,17 @@
 ---
 aide_pkg: "aide"                                         #override with a specific version if required
 aide_dbdir: "/var/lib/aide"
+aide_logdir: "/var/log/aide"
 aide_conf_path: "/etc/aide.conf"
 aide_macros:
 # Define a variable example
   define:
 #    - name: DBDIR variable
 #      variable: DBDIR
-#      value: /var/lib/aide
+#      value: "{{ aide_dbdir }}"
     - name: LOGDIR variable
       variable: LOGDIR
-      value: /var/log/aide
+      value: "{{ aide_logdir }}"
 # Undefine a variable example
 #  undefine:
 #    - name: Undefine DBDIR

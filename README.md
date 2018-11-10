@@ -9,7 +9,8 @@ The default settings will deploy all the same configuration options that come wi
 ## Role Variables
 `aide_pkg`: aide                                         #override with a specific version if required   
 `aide_conf_path`: "/etc/aide.conf"  
-`aide_dbdir`: /var/lib/aide   
+`aide_dbdir`: "/var/lib/aide"
+`aide_logdir`: "/var/log/aide"
 `aide_database_filename`: 'aide.db.gz'                    #only the filename, no path   
 `aide_database_out_filename`: 'aide.db.new.gz'            #only the filename, no path   
 `aide_gzip_dbout`: 'yes'                                  #yes|no   
