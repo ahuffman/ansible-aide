@@ -4,16 +4,16 @@
     name: "{{ aide_pkg }}"
     state: latest
 
-- name: Ensure directories exists
+- name: Ensure aide directories exists
   file:
     path: "{{ item }}"
     state: directory
-    owner: www-data
-    group: www-data
+    owner: root
+    group: root
     mode: 0700
   with_items:
-    - /var/log/aide
-    - /var/lib/aide
+    - "{{ aide_logdir }}"
+    - "{{ aide_dbdir }}"
 
 - name: Capture aide binary path
   command: "which aide"
