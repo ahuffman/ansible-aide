@@ -4,6 +4,8 @@
     name: "{{ aide_pkg }}"
     state: "installed"
   retries: "3"
+  register: "aide_installed"
+  until: "aide_installed is success"
 
 - name: "Ensure aide directories exists"
   file:
