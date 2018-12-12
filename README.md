@@ -1,14 +1,23 @@
 # ahuffman.aide
 
+## Description
 An Ansible role to install, configure, and schedule AIDE.
 
-The default settings will deploy all the same configuration options that come with a default aide.conf after installing the tool.
+|**Please Note**|
+|---|
+|*The default settings will deploy the configuration options that come with a default aide.conf after installing the tool.*|
+|*This has only been thoroughly tested on Fedora and RHEL7 Operating Systems.  Please open issues if you have a problem on your platform.*|
 
-**Note: This role has not been thoroughly tested on Debian or Ubuntu based systems.  This Role may also function on some other Enterprise Linux based systems such as SLES and OEL.  Please let me know if there are problems (or it works on a platform not currently mentioned in the Role's metadata) by opening an issue on the Github repository.  Pull Requests and issue submissions are always welcomed, as we'll try and make this Role as cross platform as possible as requests come in.**  
 
 ## Role Variables
-`aide_pkg`: aide                                         #override with a specific version if required   
-`aide_conf_path`: "/etc/aide.conf"  
+| Variable Name | Description | Required | Default Value | Type |
+| :---: | :---: | :---: | --- | :---:|
+| aide_pkg | Name of the aide package to install.  Override with a specific version if required. | Yes | "aide" | string |
+|aide_conf_path| Path to the aide configuration file | Yes | "/etc/aide.conf"| string |
+|aide_update_db| Whether or not to force an update of the aide database on this Role invocation | Yes | False| boolean |
+
+**TODO** - Finish converting documentation format
+
 `aide_dbdir`: "/var/lib/aide"
 `aide_logdir`: "/var/log/aide"
 `aide_database_filename`: 'aide.db.gz'                    #only the filename, no path   
@@ -32,36 +41,37 @@ The default settings will deploy all the same configuration options that come wi
 `aide_cron_sched_wkd`: '*'                                #weekday   
 
 ## Defining and Undefining aide.conf Variables
-    aide_macros:   
-      define:   
-         - name: Give it a name   
-           variable: Name_of_Variable   
-           value: Value of the variable   
-         - name: DBDIR var   
-           variable: DBDIR   
-           value: /var/lib/aide   
-      undefine:   
-         - name: Some var to undefine   
-           variable: Name_of_Variable  #This would effectively undefine the variable we defined above   
-         - name: Undefining DBDIR var   
-           variable: DBDIR   
-
+```yaml
+aide_macros:   
+  define:   
+     - name: "Give it a name"
+       variable: "Name_of_Variable"
+       value: "Value of the variable"
+     - name: "DBDIR var"
+       variable: "DBDIR"
+       value: "/var/lib/aide"
+  undefine:   
+     - name: "Some var to undefine"
+       variable: "Name_of_Variable"  #This would effectively undefine the variable we defined above
+     - name: "Undefining DBDIR var"
+       variable: "DBDIR"
+```
 
 ## Defining Rules/Groups, Selection paths, and Ignore/Negative Selection Paths
 
-A YAML spec was built to handle all of these items in a relatively organized way.   
+A YAML spec was built to handle all of these items in a relatively organized way.  
 
-### Attributes available to a rule:
-
-    aide_rules:   
-      - name: My first rule                                                #Required   
-        rule: FIPSR                                                        #Required   
-        comment: Comment to put above this rule declaration                #Optional   
-        attributes: []  #List made up of default rules or defined rules    #Required except on special negative rule   
-        paths:                                                             #Optional   
-           - /my/include/path/1  #Cannot start with '!' see Ignore/Negative Selection Paths   
-           - /my/include/path/2
-
+### Attributes available to a rule
+```yaml
+aide_rules:   
+  - name: "My first rule"                                                #Required   
+    rule: "FIPSR"                                                        #Required   
+    comment: "Comment to put above this rule declaration"                #Optional   
+    attributes: []  #List made up of default rules or defined rules      #Required except on special negative rule   
+    paths:                                                               #Optional   
+       - "/my/include/path/1"  #Cannot start with '!' see Ignore/Negative Selection Paths   
+       - "/my/include/path/2"
+```
 
 ### A Special Rule to handle Ignore/Negative Selection Paths is available
 

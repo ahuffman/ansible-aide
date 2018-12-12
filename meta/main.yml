@@ -1,6 +1,8 @@
 galaxy_info:
+  role_name: "aide"
   author: "Andrew J. Huffman"
   description: "An Ansible role to install, configure, and schedule AIDE."
+  company: "Red Hat"
 #  company: your company (optional)
 
   # If the issue tracker for your role is not on github, uncomment the
@@ -16,7 +18,7 @@ galaxy_info:
   # - CC-BY
   license: "MIT"
 
-  min_ansible_version: "1.2"
+  min_ansible_version: "2.5"
 
   # Optionally specify the branch Galaxy will use when accessing the GitHub
   # repo for this role. During role install, if no tags are available,
@@ -52,15 +54,17 @@ galaxy_info:
   #  - 11.3
   - name: "Fedora"
     versions:
+      - "all"
   #  - all
   #  - 16
   #  - 17
   #  - 18
   #  - 19
-     - "20"
-     - "21"
-     - "22"
-     - "23"
+  # - "20"
+  # - "21"
+  # - "22"
+  # - "23"
+
   #- name: opensuse
   #  versions:
   #  - all
@@ -160,7 +164,7 @@ galaxy_info:
 
   galaxy_tags:
     - "system"
-    - "advanced intrusion detection environment"
+    - "advancedintrusiondetectionenvironment"
     - "aide"
     - "aideconf"
     - "security"

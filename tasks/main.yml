@@ -1,47 +1,49 @@
 ---
-- name: Ensure aide is installed
+- name: "Ensure aide is installed"
   package:
     name: "{{ aide_pkg }}"
-    state: latest
+    state: "installed"
+  retries: "3"
 
-- name: Ensure aide directories exists
+- name: "Ensure aide directories exists"
   file:
     path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0700
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0700"
   with_items:
     - "{{ aide_logdir }}"
     - "{{ aide_dbdir }}"
 
-- name: Capture aide binary path
-  command: "which aide"
-  register: aide_path
-  changed_when: false
+#use shell here so it gets full environment
+- name: "Capture aide binary path"
+  shell: "which aide"
+  register: "aide_path"
+  changed_when: False
 
-- name: Check for existing aide database
+- name: "Check for existing aide database"
   stat:
     path: "{{ aide_dbdir }}/{{ aide_database_filename }}"
-  register: aide_db_check
-  changed_when: "aide_db_check.stat.exists != True"
+  register: "aide_db_check"
+  changed_when: "not aide_db_check.stat.exists"
   notify:
-    - Initialize aide database
-    - Move new aide database into place
+    - "Initialize aide database"
+    - "Move new aide database into place"
 
-- name: Configure aide
+- name: "Configure aide"
   template:
-    src: aide.conf.j2
+    src: "aide.conf.j2"
     dest: "{{ aide_conf_path }}"
     validate: "{{ aide_path.stdout }} -D -c %s"
 
 #Setup crontab
-- name: Ensure aide check is setup in crontab - No Email Report
+- name: "Ensure aide check is setup in crontab - No Email Report"
   cron:
     name: "{{ aide_cronjob_name }}"
-    backup: yes
-    user: root
-    state: present
+    backup: "yes"
+    user: "root"
+    state: "present"
     minute: "{{ aide_cron_sched_min }}"
     hour: "{{ aide_cron_sched_hr }}"
     day: "{{ aide_cron_sched_day }}"
@@ -49,15 +51,15 @@
     weekday: "{{ aide_cron_sched_wkd }}"
     job: "{{ aide_path.stdout }} --check"
   when:
-    - aide_cron_email_notify == ''
-    - aide_cron_schedule_check == True
+    - "aide_cron_email_notify == ''"
+    - "aide_cron_schedule_check"
 
-- name: Ensure aide check is setup in crontab - With Email Report
+- name: "Ensure aide check is setup in crontab - With Email Report"
   cron:
     name: "{{ aide_cronjob_name }}"
-    backup: yes
-    user: root
-    state: present
+    backup: "yes"
+    user: "root"
+    state: "present"
     minute: "{{ aide_cron_sched_min }}"
     hour: "{{ aide_cron_sched_hr }}"
     day: "{{ aide_cron_sched_day }}"
@@ -65,30 +67,32 @@
     weekday: "{{ aide_cron_sched_wkd }}"
     job: "{{ aide_path.stdout }} --check | /usr/bin/mail -s 'AIDE Report - $HOSTNAME' {{ aide_cron_email_notify }}"
   when:
-    - aide_cron_email_notify != ''
-    - aide_cron_schedule_check == True
+    - "aide_cron_email_notify != ''"
+    - "aide_cron_schedule_check"
 
 #Remove old cron jobs when aide_cron_schedule_check has been changed to False
-- name: Ensure aide check is removed in crontab - No Email Report
+- name: "Ensure aide check is removed in crontab - No Email Report"
   cron:
     name: "{{ aide_cronjob_name }}"
-    state: absent
+    state: "absent"
   when:
-    - aide_cron_email_notify == ''
-    - aide_cron_schedule_check == False
+    - "aide_cron_email_notify == ''"
+    - "not aide_cron_schedule_check"
 
-- name: Ensure aide check is removed in crontab - With Email Report
+- name: "Ensure aide check is removed in crontab - With Email Report"
   cron:
     name: "{{ aide_cronjob_name }}"
-    state: absent
+    state: "absent"
   when:
-    - aide_cron_email_notify != ''
-    - aide_cron_schedule_check == False
+    - "aide_cron_email_notify != ''"
+    - "not aide_cron_schedule_check"
 
-- name: Update aide database
+- name: "Update aide database"
   command: "{{ aide_path.stdout }} -u"
-  register: aide_update
+  register: "aide_update"
   failed_when: "aide_update.rc > 7"
-  when: "aide_db_check.stat.exists == True"
+  when:
+    - "aide_db_check.stat.exists"
+    - "aide_update_db"
   notify:
-    - Move new aide database into place
+    - "Move new aide database into place"
