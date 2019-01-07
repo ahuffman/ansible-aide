@@ -5,7 +5,7 @@
     state: "installed"
   retries: "3"
   register: "aide_installed"
-  until: "aide_installed is success"
+  until: "aide_installed is succeeded"
 
 - name: "Ensure aide directories exists"
   file:
