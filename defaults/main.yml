@@ -20,20 +20,21 @@ define:
 #      variable: 'DBDIR'
 aide_database_filename: "aide.db.gz"                    #only the filename, no path
 aide_database_out_filename: "aide.db.new.gz"            #only the filename, no path
-aide_gzip_dbout: "yes"                                  #yes|no
+aide_gzip_dbout: True                                   #yes|no|true|false|True|False
 aide_verbose: 5                                         #level of verbosity 0-255
 aide_report_url:
   - 'file:@@{LOGDIR}/aide.log'
   - "stdout"
-aide_acl_no_symlink_follow: "yes"                       #yes|true|no|false
-aide_warn_dead_symlinks: "no"                           #yes|true|no|false
-aide_summarize_changes: "no"                            #yes|true|no|false
+aide_acl_no_symlink_follow: True                        #yes|true|True|no|false|False
+aide_warn_dead_symlinks: False                          #yes|true|True|no|false|False
+aide_summarize_changes: False                           #yes|true|no|false
 #aide_report_attributes: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool
-#aide_ignore_list: []                                   #list of default rules to ignore in reports ^
+aide_ignore_list: []                                   #list of default rules to ignore in reports ^
+aide_grouped: False
 aide_config_version: "1"                                  #optional for information only
 aide_cron_schedule_check: True
   #Whether or not to add a scheduled aide --check to cron you'd have to manually run your checks if preferred
-aide_cron_email_notify: ""                              #Who to email aide report to after aide --check. Can be comma-separated list
+aide_cron_email_notify_recipients: []                              #Who to email aide report to after aide --check. Can be comma-separated list
 aide_cronjob_name: "aide scheduled database checkup"                           #will put a comment in crontab for this scheduled job
 aide_cron_sched_min: "0"                                                       #minute
 aide_cron_sched_hr: "1"                                                        #hour

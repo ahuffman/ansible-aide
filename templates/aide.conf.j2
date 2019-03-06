@@ -31,8 +31,10 @@ database=file:{{ aide_dbdir }}/{{ aide_database_filename }}
 {% if aide_database_out_filename is defined and aide_dbdir is defined %}
 database_out=file:{{ aide_dbdir }}/{{ aide_database_out_filename }}
 {% endif %}
-{% if aide_gzip_dbout is defined %}
-gzip_dbout={{ aide_gzip_dbout }}
+{% if aide_gzip_dbout %}
+gzip_dbout=yes
+{% else %}
+gzip_dbout=no
 {% endif %}
 {% if aide_verbose is defined %}
 verbose={{ aide_verbose }}
@@ -42,23 +44,31 @@ verbose={{ aide_verbose }}
 report_url={{ i }}
 {% endfor %}
 {% endif %}
-{% if aide_acl_no_symlink_follow is defined %}
-acl_no_symlink_follow={{ aide_acl_no_symlink_follow }}
+{% if aide_acl_no_symlink_follow %}
+acl_no_symlink_follow=yes
+{% else %}
+acl_no_symlink_follow=no
 {% endif %}
-{% if aide_warn_dead_symlinks is defined %}
-warn_dead_symlinks={{ aide_warn_dead_symlinks }}
+{% if aide_warn_dead_symlinks %}
+warn_dead_symlinks=yes
+{% else %}
+warn_dead_symlinks=no
 {% endif %}
-{% if aide_grouped is defined %}
-grouped={{ aide_grouped }}
+{% if aide_grouped %}
+grouped=yes
+{% else %}
+grouped=no
 {% endif %}
-{% if aide_summarize_changes is defined %}
-summarize_changes={{ aide_summarize_changes }}
+{% if aide_summarize_changes %}
+summarize_changes=yes
+{% else %}
+summarize_changes=no
 {% endif %}
 {% if aide_report_attributes is defined %}
 report_attributes={% for i in aide_report_attributes %}{% if loop.last %}{{ i }}
 {% else %}{{ i }}+{% endif %}{% endfor %}
 {% endif %}
-{% if aide_ignore_list is defined %}
+{% if aide_ignore_list is defined and aide_ignore_list | length > 0 %}
 ignore_list={% for i in aide_ignore_list %}{% if loop.last %}{{ i }}
 {% else %}{{ i }}+{% endif %}{% endfor %}
 {% endif %}
