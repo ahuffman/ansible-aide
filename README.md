@@ -11,7 +11,7 @@ An Ansible role to install, configure, and schedule AIDE.
 
 ## Role Variables
 | Variable Name | Description | Required | Default Value | Type |
-| :---: | :---: | :---: | --- | :---:|
+| --- | --- | :---: | --- | :---:|
 | aide_pkg | Name of the aide package to install.  Override with a specific version if required. | Yes | "aide" | string |
 |aide_conf_path| Path to the aide configuration file | Yes | "/etc/aide.conf"| string |
 |aide_update_db| Whether or not to force an update of the aide database on this Role invocation | Yes | False| boolean |
