@@ -23,6 +23,7 @@
   shell: "which aide"
   register: "aide_path"
   changed_when: False
+  check_mode: False
 
 - name: "Check for existing aide database"
   stat:
