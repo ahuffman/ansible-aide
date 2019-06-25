@@ -91,7 +91,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - ahuffman.aide
+         - kmonticolo.ansible_aide
 
 License
 -------
