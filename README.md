@@ -1,4 +1,6 @@
-# ahuffman.aide
+kmonticolo.ansible_aide
+=========
+[![Galaxy](https://img.shields.io/badge/kmonticolo.ansible_aide-blue.svg?style=flat)](https://galaxy.ansible.com/kmonticolo/ansible_aide)
 
 An Ansible role to install, configure, and schedule AIDE.
 
