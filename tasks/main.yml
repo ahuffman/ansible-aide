@@ -24,7 +24,7 @@
   stat:
     path: "{{ aide_dbdir }}/{{ aide_database_filename }}"
   register: aide_db_check
-  changed_when: "aide_db_check.stat.exists != True"
+  changed_when: not aide_db_check.stat.exists
   notify:
     - Initialize aide database
     - Move new aide database into place
@@ -49,8 +49,8 @@
     weekday: "{{ aide_cron_sched_wkd }}"
     job: "{{ aide_path.stdout }} --check"
   when:
-    - aide_cron_email_notify == ''
-    - aide_cron_schedule_check == True
+    - not aide_cron_email_notify
+    - aide_cron_schedule_check
 
 - name: Ensure aide check is setup in crontab - With Email Report
   cron:
@@ -65,8 +65,8 @@
     weekday: "{{ aide_cron_sched_wkd }}"
     job: "{{ aide_path.stdout }} --check | /usr/bin/mail -s 'AIDE Report - $HOSTNAME' {{ aide_cron_email_notify }}"
   when:
-    - aide_cron_email_notify != ''
-    - aide_cron_schedule_check == True
+    - aide_cron_email_notify
+    - aide_cron_schedule_check
 
 #Remove old cron jobs when aide_cron_schedule_check has been changed to False
 - name: Ensure aide check is removed in crontab - No Email Report
@@ -74,21 +74,21 @@
     name: "{{ aide_cronjob_name }}"
     state: absent
   when:
-    - aide_cron_email_notify == ''
-    - aide_cron_schedule_check == False
+    - not aide_cron_email_notify
+    - not aide_cron_schedule_check
 
 - name: Ensure aide check is removed in crontab - With Email Report
   cron:
     name: "{{ aide_cronjob_name }}"
     state: absent
   when:
-    - aide_cron_email_notify != ''
-    - aide_cron_schedule_check == False
+    - aide_cron_email_notify
+    - not aide_cron_schedule_check
 
 - name: Update aide database
-  command: "{{ aide_path.stdout }} -u"
+  command: "{{ aide_path.stdout }} -u -c {{ aide_conf_path }}"
   register: aide_update
   failed_when: "aide_update.rc > 7"
-  when: "aide_db_check.stat.exists == True"
+  when: aide_db_check.stat.exists
   notify:
     - Move new aide database into place
