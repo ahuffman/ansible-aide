@@ -2,7 +2,7 @@
 - name: Ensure aide is installed
   package:
     name: "{{ aide_pkg }}"
-    state: latest
+    state: present
 
 - name: Ensure aide directories exists
   file:
