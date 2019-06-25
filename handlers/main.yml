@@ -1,10 +1,10 @@
 ---
 - name: Initialize aide database
-  shell: aide -i
+  command: "{{ aide_path.stdout }} -i -c {{ aide_conf_path }}"
   when: not aide_db_check.stat.exists
 
 - name: Move new aide database into place
-  shell: mv "{{ aide_database_out_filename }}" "{{ aide_database_filename }}"
+  command: "mv {{ aide_database_out_filename }} {{ aide_database_filename }}"
   args:
     chdir: "{{ aide_dbdir }}"
   when: ("not aide_db_check.stat.exists") or ("aide_update.changed")
