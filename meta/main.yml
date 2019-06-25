@@ -2,11 +2,11 @@ galaxy_info:
   author: Andrew J. Huffman
   description: An Ansible role to install, configure, and schedule AIDE.
 #  company: your company (optional)
-  
+
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
-  
+
   # Some suggested licenses:
   # - BSD (default)
   # - MIT
@@ -15,7 +15,7 @@ galaxy_info:
   # - Apache
   # - CC-BY
   license: MIT
-  
+
   min_ansible_version: 1.2
 
   # Optionally specify the branch Galaxy will use when accessing the GitHub
@@ -25,7 +25,7 @@ galaxy_info:
   # branch will be accepted. Otherwise, in all cases, the repo's default branch
   # (usually master) will be used.
   #github_branch:
-  
+
   #
   # Below are all platforms currently available. Just uncomment
   # the ones that apply to your role. If you don't see your
@@ -157,7 +157,7 @@ galaxy_info:
   #  - squeeze
      - stretch
      - wheezy
-  
+
   galaxy_tags:
     - system
     - intrusion
