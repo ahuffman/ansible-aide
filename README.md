@@ -1,4 +1,4 @@
-# kmonticolo.ansible_aide
+kmonticolo.ansible_aide
 =========
 [![Galaxy](https://img.shields.io/badge/kmonticolo.ansible_aide-blue.svg?style=flat)](https://galaxy.ansible.com/kmonticolo/ansible_aide)
 
