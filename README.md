@@ -1,6 +1,4 @@
 # kmonticolo.ansible_aide
-
-AIDE ansible role
 =========
 [![Galaxy](https://img.shields.io/badge/kmonticolo.ansible_aide-blue.svg?style=flat)](https://galaxy.ansible.com/kmonticolo/ansible_aide)
 
