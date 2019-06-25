@@ -50,7 +50,7 @@
     job: "{{ aide_path.stdout }} --check"
   when:
     - not aide_cron_email_notify
-    - aide_cron_schedule_check
+    - aide_cron_schedule_check|bool
 
 - name: Ensure aide check is setup in crontab - With Email Report
   cron:
@@ -66,7 +66,7 @@
     job: "{{ aide_path.stdout }} --check | /usr/bin/mail -s 'AIDE Report - $HOSTNAME' {{ aide_cron_email_notify }}"
   when:
     - aide_cron_email_notify
-    - aide_cron_schedule_check
+    - aide_cron_schedule_check|bool
 
 #Remove old cron jobs when aide_cron_schedule_check has been changed to False
 - name: Ensure aide check is removed in crontab - No Email Report
@@ -75,7 +75,7 @@
     state: absent
   when:
     - not aide_cron_email_notify
-    - not aide_cron_schedule_check
+    - not aide_cron_schedule_check|bool
 
 - name: Ensure aide check is removed in crontab - With Email Report
   cron:
@@ -83,7 +83,7 @@
     state: absent
   when:
     - aide_cron_email_notify
-    - not aide_cron_schedule_check
+    - not aide_cron_schedule_check|bool
 
 - name: Update aide database
   command: "{{ aide_path.stdout }} -u -c {{ aide_conf_path }}"
