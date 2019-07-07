@@ -1,6 +1,6 @@
 ---
 - name: "Initialize aide database"
-  command: "{{ aide_path.stdout }} -i"
+  command: "{{ aide_init_cmd }}"
   when: "not aide_db_check.stat.exists"
 
 - name: "Move new aide database into place"

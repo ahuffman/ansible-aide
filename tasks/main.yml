@@ -52,7 +52,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: "{{ aide_path.stdout }} --check"
+    job: "{{ aide_check_cmd }}"
   when:
     - "aide_cron_email_notify_recipients | length < 1"
     - "aide_cron_schedule_check"
@@ -74,7 +74,7 @@
     day: "{{ aide_cron_sched_day }}"
     month: "{{ aide_cron_sched_mon }}"
     weekday: "{{ aide_cron_sched_wkd }}"
-    job: "{{ aide_path.stdout }} --check | /usr/bin/mail -s 'AIDE Report - $HOSTNAME' {{ aide_cron_email_notify_recipients|join(',') }}"
+    job: "{{ aide_check_cmd }} | /usr/bin/mail -s 'AIDE Report - $HOSTNAME' {{ aide_cron_email_notify_recipients|join(',') }}"
   when:
     - "aide_cron_email_notify_recipients | length > 0"
     - "aide_cron_schedule_check"
@@ -104,7 +104,7 @@
     - "not aide_cron_schedule_check"
 
 - name: "Update aide database"
-  command: "{{ aide_path.stdout }} -u"
+  command: "{{ aide_update_cmd }}"
   register: "aide_update"
   failed_when: "aide_update.rc > 7"
   when:
