@@ -31,6 +31,7 @@ An Ansible role to install, configure, and schedule AIDE.
 |aide_config_version|The value of config_version is printed in the report and also printed to the database.  This  is  for  informational  purposes only. It has no other functionality.| No | "1" | string |
 |aide_cron_schedule_check|Whether or not to setup a cron job for running an aide check|Yes|True|boolean|
 |aide_cron_email_notify_recipients|List of email recipients to get an email notification after a cronjob.  Leave list empty if you do not want this functionality.|Yes|[]|list|
+|aide_call_without_parms | Define if the aide command is call without the configuration file (if False `aide` is call as `aide -c aide_conf_path`)|No|True|boolean|
 |aide_cronjob_name | Comment to insert prior to the cronjob in the crontab|Yes|"aide scheduled database checkup"|string|
 |aide_cron_sched_min|Minute to schedule the start of the cronjob at|No|"0"|string|
 |aide_cron_sched_hr|Hour to schedule the start of the cronjob at|No|"1"|string|
@@ -40,15 +41,15 @@ An Ansible role to install, configure, and schedule AIDE.
 
 ## Defining and Undefining aide.conf Variables
 ```yaml
-aide_macros:   
-  define:   
+aide_macros:
+  define:
      - name: "Give it a name"
        variable: "Name_of_Variable"
        value: "Value of the variable"
      - name: "DBDIR var"
        variable: "DBDIR"
        value: "/var/lib/aide"
-  undefine:   
+  undefine:
      - name: "Some var to undefine"
        variable: "Name_of_Variable"  #This would effectively undefine the variable we defined above
      - name: "Undefining DBDIR var"
@@ -56,33 +57,33 @@ aide_macros:
 ```
 
 ## Defining Rules/Groups, Selection paths, and Ignore/Negative Selection Paths
-A YAML spec was built to handle all of these items in a relatively organized way.  
+A YAML spec was built to handle all of these items in a relatively organized way.
 
 ### Attributes available to a rule
 ```yaml
-aide_rules:   
-  - name: "My first rule"                                                #Required   
-    rule: "FIPSR"                                                        #Required   
-    comment: "Comment to put above this rule declaration"                #Optional   
-    attributes: []  #List made up of default rules or defined rules      #Required except on special negative rule   
-    paths:                                                               #Optional   
-       - "/my/include/path/1"  #Cannot start with '!' see Ignore/Negative Selection Paths   
+aide_rules:
+  - name: "My first rule"                                                #Required
+    rule: "FIPSR"                                                        #Required
+    comment: "Comment to put above this rule declaration"                #Optional
+    attributes: []  #List made up of default rules or defined rules      #Required except on special negative rule
+    paths:                                                               #Optional
+       - "/my/include/path/1"  #Cannot start with '!' see Ignore/Negative Selection Paths
        - "/my/include/path/2"
 ```
 
 ### A Special Rule to handle Ignore/Negative Selection Paths is available
 
-Add a rule to your `aide_rules`: definition with `rule`: negative   
-Here's an example, and you can also find an example in this Role's defaults/main.yml:   
+Add a rule to your `aide_rules`: definition with `rule`: negative
+Here's an example, and you can also find an example in this Role's defaults/main.yml:
 ```yaml
-aide_rules:   
-  - name: "My negative/ignore selections"                                #Required   
-    rule: "negative"                                                     #Required   
-    paths:                                                             #Required   
+aide_rules:
+  - name: "My negative/ignore selections"                                #Required
+    rule: "negative"                                                     #Required
+    paths:                                                             #Required
        - "/my/ignore/path/1"
        - "/my/ignore/path/2"
 ```
-Do not include an '!' in front of the paths, the template logic will automatically do this for you.  
+Do not include an '!' in front of the paths, the template logic will automatically do this for you.
 
 ### Scheduled Cron Aide Checks
 The default is to setup an 'aide --check' in crontab.  Should you wish to change this after already allowing this role to create the cron job, simply switch the variable `aide_cron_schedule_check` to False.  This will remove the cron job from your system's crontab on the next playbook run.  One caveat to be aware of is that the `aide_cronjob_name` variable must match what's currently in the crontab to be removed properly.
