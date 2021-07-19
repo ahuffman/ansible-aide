@@ -1,3 +1,5 @@
+![Ansible Role](https://img.shields.io/ansible/role/d/10133)
+
 # ahuffman.aide
 
 ## Description
