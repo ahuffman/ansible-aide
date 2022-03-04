@@ -1,16 +1,16 @@
 ---
-aide_pkg: "aide"                                         #override with a specific version if required
+aide_pkg: "aide"
 aide_dbdir: "/var/lib/aide"
 aide_logdir: "/var/log/aide"
 aide_conf_path: "/etc/aide.conf"
-aide_update_db: False
+aide_update_db: false
 # Whether or not to update the aide database this run if it exists
-aide_macros: False
+aide_macros: false
 # Define a variable example
 define:
-#    - name: DBDIR variable
-#      variable: DBDIR
-#      value: "{{ aide_dbdir }}"
+# - name: DBDIR variable
+#   variable: DBDIR
+#     value: "{{ aide_dbdir }}"
   - name: "LOGDIR variable"
     variable: "LOGDIR"
     value: "{{ aide_logdir }}"
@@ -18,33 +18,39 @@ define:
 #  undefine:
 #    - name: Undefine DBDIR
 #      variable: 'DBDIR'
-aide_database_filename: "aide.db.gz"                    #only the filename, no path
-aide_database_out_filename: "aide.db.new.gz"            #only the filename, no path
-aide_gzip_dbout: True                                   #yes|no|true|false|True|False
-aide_verbose: 5                                         #level of verbosity 0-255
+aide_database_filename: "aide.db.gz"
+aide_database_out_filename: "aide.db.new.gz"
+aide_gzip_dbout: true
+aide_verbose: 5
 aide_report_url:
   - 'file:@@{LOGDIR}/aide.log'
   - "stdout"
-aide_acl_no_symlink_follow: True                        #yes|true|True|no|false|False
-aide_warn_dead_symlinks: False                          #yes|true|True|no|false|False
-aide_summarize_changes: False                           #yes|true|no|false
-#aide_report_attributes: []                             #list of default rules to report: p,i,n,u,g,s,b,m,a,c,S,acl,selinux,xattrs,md5,sha1,sha256,sha512,rmd160,tiger,haval,gost,crc32,whirlpool
-aide_ignore_list: []                                   #list of default rules to ignore in reports ^
-aide_grouped: False
-aide_config_version: "1"                                  #optional for information only
-aide_cron_schedule_check: True
+aide_acl_no_symlink_follow: true
+aide_warn_dead_symlinks: false
+aide_summarize_changes: false
+# aide_report_attributes: []
+aide_ignore_list: []
+aide_grouped: false
+aide_config_version: "1"
+aide_cron_schedule_check: true
   #Whether or not to add a scheduled aide --check to cron you'd have to manually run your checks if preferred
-aide_cron_email_notify_recipients: []                              #Who to email aide report to after aide --check. Can be comma-separated list
-aide_cronjob_name: "aide scheduled database checkup"                           #will put a comment in crontab for this scheduled job
-aide_cron_sched_min: "0"                                                       #minute
-aide_cron_sched_hr: "1"                                                        #hour
-aide_cron_sched_day: "*"                                                       #day
-aide_cron_sched_mon: "*"                                                       #month
-aide_cron_sched_wkd: "*"                                                       #weekday
+aide_cron_email_notify_recipients: []
+aide_cronjob_name: "aide scheduled database checkup"
+aide_cron_sched_min: "0"
+aide_cron_sched_hr: "1"
+aide_cron_sched_day: "*"
+aide_cron_sched_mon: "*"
+aide_cron_sched_wkd: "*"
+aide_call_without_params: true
+aide_init_cmd: '{{ "aide -i" if aide_call_without_params
+else "aide --init --config=" + aide_conf_path }}'
+aide_check_cmd: '{{ "aide -C" if aide_call_without_params
+else "aide --check --config=" + aide_conf_path }}'
+aide_update_cmd: '{{ "aide -u" if aide_call_without_params
+else "aide --update --config=" + aide_conf_path }}'
 aide_rules:
   - name: "FIPSR Rule"
     rule: "FIPSR"
-#    comment: Example Rule Comment
     attributes: ['p', 'i', 'n', 'u', 'g', 's', 'm', 'c', 'acl', 'selinux', 'xattrs', 'sha256']
   - name: "ALLXTRAHASHES Rule"
     rule: "ALLXTRAHASHES"
@@ -156,7 +162,6 @@ aide_rules:
     attributes: ['p', 'n', 'u', 'g', 's', 'acl', 'selinux', 'xattrs', 'sha256']
     paths:
       - "/etc/resolv.conf"
-#Special rule for ignoring paths. This will add '!' to the beginning of the path for you in the config.
   - name: "Special Negative/Ignore Path rule"
     rule: "negative"
     paths:
@@ -167,3 +172,5 @@ aide_rules:
       - "/var/log/sa"
       - "/var/log/aide.log"
       - "/var/log/and-httpd"
+      - "/var/log/audit/audit.log*"
+      - "/var/log/lastlog"
